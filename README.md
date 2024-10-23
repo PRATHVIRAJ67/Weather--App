@@ -4,7 +4,7 @@ Here’s the updated **README** file with the hosted link added:
 
 # Weather Dashboard
 
-![Weather Dashboard](./dashboard.png)
+![Weather Dashboard](./dashboard.png.png)
 
 ## Overview
 
