@@ -1,64 +1,76 @@
-// app/Components/FiveDayForecast.js
-
-"use client";
 import { useGlobalContext } from "@/app/context/globalContext";
 import { calender } from "@/app/utils/Icons";
 import { kelvinToCelsius, unixToDay } from "@/app/utils/misc";
 import { Skeleton } from "@/components/ui/skeleton";
 import React, { useEffect } from "react";
 
+// Define the type for the forecast data
+interface DailyData {
+  main: {
+    temp_min: number;
+    temp_max: number;
+  };
+  dt: number;
+}
+
+interface FiveDayForecastData {
+  city: {
+    name: string;
+  };
+  list: DailyData[];
+}
+
+// Define the type for processed forecast data
+interface ProcessedForecast {
+  day: string;
+  minTemp: number;
+  maxTemp: number;
+  avgTemp: number;
+}
+
 function FiveDayForecast() {
   const { fiveDayForecast } = useGlobalContext();
 
-  const { city, list } = fiveDayForecast;
-
-  if (!fiveDayForecast || !city || !list) {
+  if (!fiveDayForecast || !fiveDayForecast.city || !fiveDayForecast.list) {
     return <Skeleton className="h-[12rem] w-full" />;
   }
 
-  const processData = (
-    dailyData // Removed TypeScript type annotations
-  ) => {
+  const processData = (dailyData: DailyData[]): ProcessedForecast => {
     let minTemp = Number.MAX_VALUE;
     let maxTemp = Number.MIN_VALUE;
 
-    dailyData.forEach(
-      (day) => {
-        if (day.main.temp_min < minTemp) {
-          minTemp = day.main.temp_min;
-        }
-        if (day.main.temp_max > maxTemp) {
-          maxTemp = day.main.temp_max;
-        }
+    dailyData.forEach((day) => {
+      if (day.main.temp_min < minTemp) {
+        minTemp = day.main.temp_min;
       }
-    );
+      if (day.main.temp_max > maxTemp) {
+        maxTemp = day.main.temp_max;
+      }
+    });
 
     const minCelsius = kelvinToCelsius(minTemp);
     const maxCelsius = kelvinToCelsius(maxTemp);
-
-    
     const avgTemp = (minCelsius + maxCelsius) / 2;
 
     return {
       day: unixToDay(dailyData[0].dt),
       minTemp: parseFloat(minCelsius.toFixed(1)),
       maxTemp: parseFloat(maxCelsius.toFixed(1)),
-      avgTemp: parseFloat(avgTemp.toFixed(1)), // Store the average temperature
+      avgTemp: parseFloat(avgTemp.toFixed(1)),
     };
   };
 
-  const dailyForecasts = [];
+  // Define the type of dailyForecasts explicitly
+  const dailyForecasts: ProcessedForecast[] = [];
 
-  for (let i = 0; i < list.length; i += 8) { 
-    const dailyData = list.slice(i, i + 8); // Assuming 8 data points per day (e.g., 3-hour intervals)
+  for (let i = 0; i < fiveDayForecast.list.length; i += 8) {
+    const dailyData = fiveDayForecast.list.slice(i, i + 8);
     if (dailyData.length) {
       dailyForecasts.push(processData(dailyData));
     }
   }
 
-  
   useEffect(() => {
-    
     localStorage.setItem("averageData", JSON.stringify(dailyForecasts));
   }, [dailyForecasts]);
 
@@ -69,7 +81,7 @@ function FiveDayForecast() {
     >
       <div>
         <h2 className="flex items-center gap-2 font-medium">
-          {calender} 5-Day Forecast for {city.name}
+          {calender} 5-Day Forecast for {fiveDayForecast.city.name}
         </h2>
 
         <div className="forecast-list pt-3">
@@ -91,9 +103,9 @@ function FiveDayForecast() {
                   <p className="font-bold">{day.maxTemp}°C</p>
                 </div>
 
-                {}
                 <p className="text-sm text-gray-500">
-                  Average Temperature: <span className="font-bold">{day.avgTemp}°C</span>
+                  Average Temperature:{" "}
+                  <span className="font-bold">{day.avgTemp}°C</span>
                 </p>
               </div>
             );
