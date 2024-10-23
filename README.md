@@ -1,14 +1,16 @@
-Here is the complete **README** file for your **Weather Dashboard** project:
+Here’s the updated **README** file with the hosted link added:
 
 ---
 
 # Weather Dashboard
 
-![Weather Dashboard](./dashboard.png.png)
+![Weather Dashboard](./dashboard.png)
 
 ## Overview
 
 This project is a **Weather Dashboard** designed to display real-time weather conditions for a specific location. The dashboard provides various weather metrics, including temperature, humidity, air pollution, UV index, and other relevant data. It also includes a 5-day weather forecast and updates in real-time, offering users continuous monitoring of weather conditions.
+
+You can check out the live project here: **[Weather Dashboard](https://zeotap-assignment.vercel.app/)**
 
 ## Features
 
