@@ -84,7 +84,7 @@ export const GlobalContextProvider = ({ children }) => {
     }
   };
 
-  // debounce function
+  
   useEffect(() => {
     const debouncedFetch = debounce((search) => {
       fetchGeoCodedList(search);
@@ -94,7 +94,7 @@ export const GlobalContextProvider = ({ children }) => {
       debouncedFetch(inputValue);
     }
 
-    // cleanup
+    
     return () => debouncedFetch.cancel();
   }, [inputValue]);
 

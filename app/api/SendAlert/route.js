@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 import { NextResponse } from 'next/server';
 import dotenv from 'dotenv';
 
-// Load environment variables
+
 dotenv.config();
 
 export async function POST(req) {
@@ -17,7 +17,7 @@ export async function POST(req) {
     let transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 587,
-      secure: false, // true for port 465, false for other ports
+      secure: false, 
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
