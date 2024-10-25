@@ -15,7 +15,7 @@ import axios from "axios";
 
 function Temperature() {
   const { forecast } = useGlobalContext();
-  const { main, timezone, name, weather } = forecast; // 'name' is the city name
+  const { main, timezone, name, weather } = forecast; 
 
   if (!forecast || !weather) {
     return <div>Loading...</div>;
@@ -25,12 +25,10 @@ function Temperature() {
   const minTemp = kelvinToCelsius(main?.temp_min);
   const maxTemp = kelvinToCelsius(main?.temp_max);
 
-  // State
   const [localTime, setLocalTime] = useState<string>("");
   const [currentDay, setCurrentDay] = useState<string>("");
   const [inputEmail, setInputEmail] = useState<string>("");
   const [message, setMessage] = useState<string>("");
-  const [emailSent, setEmailSent] = useState<boolean>(false);
 
   const { main: weatherMain, description } = weather[0];
 
@@ -51,38 +49,32 @@ function Temperature() {
     }
   };
 
-  // Live time update
   useEffect(() => {
-    // Update time every second
     const interval = setInterval(() => {
       const localMoment = moment().utcOffset(timezone / 60);
-      // custom format: 24-hour format
       const formattedTime = localMoment.format("HH:mm:ss");
-      // day of the week
       const day = localMoment.format("dddd");
 
       setLocalTime(formattedTime);
       setCurrentDay(day);
     }, 1000);
 
-    // Clear interval
     return () => clearInterval(interval);
   }, [timezone]);
 
-  // Send email continuously every 15 seconds once the email is saved
+  // Every 15 second u will recieve a mail if u want u can update it to 35 
   useEffect(() => {
-    if (inputEmail) {
+    if (inputEmail && temp > 25) {
       const interval = setInterval(() => {
         axios.post('/api/SendAlert', { email: inputEmail, temperature: temp, city: name })
           .then(response => {
-            console.log("Email sent: ", response.data.message);
+            console.log("Alert email sent: ", response.data.message);
           })
           .catch(error => {
             console.error('Error sending alert:', error.message);
           });
-      }, 15000); // Send email every 15 seconds
+      }, 15000); 
 
-      // Clear interval on unmount
       return () => clearInterval(interval);
     }
   }, [inputEmail, temp, name]);
@@ -93,14 +85,13 @@ function Temperature() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add functionality to handle the input email, e.g., send an alert
     axios.post('/api/SendAlert', { email: inputEmail, temperature: temp, city: name })
       .then(response => {
-        setMessage("Email address added Sucessfully");
+        setMessage("Email address added successfully.");
         setTimeout(() => setMessage(""), 5000);
       })
       .catch(error => {
-        setMessage("Failed to add Email addresss. Please try again.");
+        setMessage("Failed to add email address. Please try again.");
       });
   };
 
@@ -114,7 +105,7 @@ function Temperature() {
           type="email"
           value={inputEmail}
           onChange={handleInputChange}
-          placeholder="Please add u r email address"
+          placeholder="Please add your email address"
           className="p-2 border rounded-md w-full mb-2"
         />
         <button
@@ -132,7 +123,7 @@ function Temperature() {
         <span className="font-medium">{localTime}</span>
       </p>
       <p className="pt-2 font-bold flex gap-1">
-        <span>{name}</span> {/* Displaying the city name */}
+        <span>{name}</span> {}
         <span>{navigation}</span>
       </p>
       <p className="py-10 text-9xl font-bold self-center">{temp}°</p>

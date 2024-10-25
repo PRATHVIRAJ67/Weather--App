@@ -28,7 +28,7 @@ function DailyForecast() {
   const today = new Date();
   const todayString = today.toISOString().split("T")[0];
 
-  //filter the list for today's forecast
+
   const todaysForecast = list.filter(
     (forecast: { dt_txt: string; main: { temp: number } }) => {
       return forecast.dt_txt.startsWith(todayString);

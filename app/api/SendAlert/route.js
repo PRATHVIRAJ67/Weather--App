@@ -28,7 +28,7 @@ export async function POST(req) {
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Temperature Alert!',
-      text: `Warning: The current temperature in ${city} is ${temperature}°C, which exceeds the limit of 30°C.`,
+      text: `Warning: The current temperature in ${city} is ${temperature}°C, which exceeds the limit of 25°C.`,
     };
 
     const result = await transporter.sendMail(mailOptions);

@@ -4,7 +4,7 @@ import { kelvinToCelsius, unixToDay } from "@/app/utils/misc";
 import { Skeleton } from "@/components/ui/skeleton";
 import React, { useEffect } from "react";
 
-// Define the type for the forecast data
+
 interface DailyData {
   main: {
     temp_min: number;
@@ -20,7 +20,7 @@ interface FiveDayForecastData {
   list: DailyData[];
 }
 
-// Define the type for processed forecast data
+
 interface ProcessedForecast {
   day: string;
   minTemp: number;
