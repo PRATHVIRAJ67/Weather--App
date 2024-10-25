@@ -1,6 +1,4 @@
-Here’s the updated **README** file with the hosted link added:
 
----
 
 # Weather Dashboard
 
